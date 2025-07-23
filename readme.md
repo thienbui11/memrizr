@@ -1,4 +1,4 @@
-# Memrizr
+# MindStack
 
 This is the repository for the Memrizr memorization application tutorial which is a work in progress. If you're interested in the tutorial, check out the videos on [YouTube](https://www.youtube.com/playlist?list=PLnrGn4P6C4P6yasdEJnEUhueTjCGXGuFe)!
 
