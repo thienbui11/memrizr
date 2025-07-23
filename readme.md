@@ -9,7 +9,3 @@ A chart of the tools and applications used in this tutorial is given below.
 ![App Overview](./application_overview.png)
 
 To run this code, you will need docker and docker-compose installed on your machine. In the project root, run `docker-compose up`.
-
-I also recommended that you use the development tool of your choice with any desired tools for go, react, vue, and node, and typescript configured.
-
-Cheers, eh!
