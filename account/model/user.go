@@ -12,4 +12,4 @@ type User struct {
 	Name     string    `db:"name" json:"name"`
 	ImageURL string    `db:"image_url" json:"imageUrl"`
 	Website  string    `db:"website" json:"website"`
-}s
+}
