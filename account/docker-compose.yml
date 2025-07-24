@@ -1,0 +1,44 @@
+services:
+  # The 'postgres-auth' service seems to be the cause of the error.
+  # Let's assume it should be 'postgres-account' based on the project structure.
+  # If you have a separate 'postgres-auth', it also needs its volume defined.
+  postgres-account:
+    image: postgres:13.3
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=account
+    ports:
+      - "5432:5432"
+    volumes:
+      # This line links the service to the named volume defined below.
+      - pgdata_account:/var/lib/postgresql/data
+
+  redis-account:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+
+  account:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres-account
+      - redis-account
+    environment:
+      - POSTGRES_HOST=postgres-account
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=account
+      - REDIS_HOST=redis-account
+      - REDIS_PORT=6379
+
+# This top-level 'volumes' block is crucial.
+# It defines the named volume that the 'postgres-account' service uses.
+volumes:
+  pgdata_account:

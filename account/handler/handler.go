@@ -4,9 +4,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/thienbui11/memrizr/account/handler/middleware"
-	"github.com/thienbui11/memrizr/account/model"
-	"github.com/thienbui11/memrizr/account/model/apperrors"
+	"github.com/thienbui11/MindStack/account/model"
+	"github.com/thienbui11/MindStack/account/model/apperrors"
 )
 
 // Handler struct holds required services for handler to function

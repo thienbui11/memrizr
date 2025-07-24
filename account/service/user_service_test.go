@@ -8,8 +8,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/thienbui11/memrizr/account/model"
-	"github.com/thienbui11/memrizr/account/model/mocks"
+	"github.com/thienbui11/MindStack/account/model"
+	"github.com/thienbui11/MindStack/account/model/apperrors"
+	"github.com/thienbui11/MindStack/account/model/mocks"
 )
 
 func TestGet(t *testing.T) {
@@ -51,6 +52,53 @@ func TestGet(t *testing.T) {
 
 		assert.Nil(t, u)
 		assert.Error(t, err)
+		mockUserRepository.AssertExpectations(t)
+	})
+}
+
+func TestSignup(t *testing.T) {
+	t.Run("Success", func(t *testing.T) {
+		uid, _ := uuid.NewRandom()
+		mockUserResp := &model.User{
+			UID:   uid,
+			Email: "bob@bob.com",
+			Name:  "Bobby Bobson",
+		}
+
+		mockUserRepository := new(mocks.MockUserRepository)
+		us := NewUserService(&USConfig{
+			UserRepository: mockUserRepository,
+		})
+
+		// Use mock.Anything to match any context
+		mockUserRepository.On("Create", mock.Anything, mockUserResp).Return(nil)
+
+		ctx := context.Background()
+		err := us.Signup(ctx, mockUserResp)
+
+		assert.NoError(t, err)
+
+		mockUserRepository.AssertExpectations(t)
+	})
+
+	t.Run("Error", func(t *testing.T) {
+		mockUser := &model.User{
+			Email: "bob@bob.com",
+			Name:  "Bobby Bobson",
+		}
+		mockUserRepository := new(mocks.MockUserRepository)
+		us := NewUserService(&USConfig{
+			UserRepository: mockUserRepository,
+		})
+
+		mockError := apperrors.NewConflict("user already exists", "bob@bob.com")
+		// Use mock.Anything to match any context
+		mockUserRepository.On("Create", mock.Anything, mockUser).Return(mockError)
+
+		ctx := context.Background()
+		err := us.Signup(ctx, mockUser)
+
+		assert.EqualError(t, err, mockError.Error())
 		mockUserRepository.AssertExpectations(t)
 	})
 }

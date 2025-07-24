@@ -11,9 +11,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/thienbui11/memrizr/account/model"
-	"github.com/thienbui11/memrizr/account/model/apperrors"
-	"github.com/thienbui11/memrizr/account/model/mocks"
+	"github.com/thienbui11/MindStack/account/model"
+	"github.com/thienbui11/MindStack/account/model/apperrors"
+	"github.com/thienbui11/MindStack/account/model/mocks"
 )
 
 func TestMe(t *testing.T) {

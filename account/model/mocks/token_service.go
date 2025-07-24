@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/stretchr/testify/mock"
-	"github.com/thienbui11/memrizr/account/model"
+	"github.com/thienbui11/MindStack/account/model"
 )
 
 // MockTokenService is a mock type for model.TokenService
