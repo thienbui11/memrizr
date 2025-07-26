@@ -1,29 +1,25 @@
 package handler
 
 import (
-	"time"
+	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thienbui11/MindStack/account/model"
-	"github.com/thienbui11/MindStack/account/model/apperrors"
 )
 
 // Handler struct holds required services for handler to function
 type Handler struct {
 	UserService  model.UserService
 	TokenService model.TokenService
-	MaxBodyBytes int64
 }
 
 // Config will hold services that will eventually be injected into this
 // handler layer on handler initialization
 type Config struct {
-	R               *gin.Engine
-	UserService     model.UserService
-	TokenService    model.TokenService
-	BaseURL         string
-	TimeoutDuration time.Duration
-	MaxBodyBytes    int64
+	R            *gin.Engine
+	UserService  model.UserService
+	TokenService model.TokenService
 }
 
 // NewHandler initializes the handler with required injected services along with http routes
@@ -33,28 +29,59 @@ func NewHandler(c *Config) {
 	h := &Handler{
 		UserService:  c.UserService,
 		TokenService: c.TokenService,
-		MaxBodyBytes: c.MaxBodyBytes,
 	} // currently has no properties
 
 	// Create an account group
-	g := c.R.Group(c.BaseURL)
+	g := c.R.Group(os.Getenv("ACCOUNT_API_URL"))
 
-	if gin.Mode() != gin.TestMode {
-		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
-		g.GET("/me", middleware.AuthUser(h.TokenService), h.Me)
-		g.POST("/signout", middleware.AuthUser(h.TokenService), h.Signout)
-		g.PUT("/details", middleware.AuthUser(h.TokenService), h.Details)
-		g.POST("/image", middleware.AuthUser(h.TokenService), h.Image)
-		g.DELETE("/image", middleware.AuthUser(h.TokenService), h.DeleteImage)
-	} else {
-		g.GET("/me", h.Me)
-		g.POST("/signout", h.Signout)
-		g.PUT("/details", h.Details)
-		g.POST("/image", h.Image)
-		g.DELETE("/image", h.DeleteImage)
-	}
-
+	g.GET("/me", h.Me)
 	g.POST("/signup", h.Signup)
 	g.POST("/signin", h.Signin)
+	g.POST("/signout", h.Signout)
 	g.POST("/tokens", h.Tokens)
+	g.POST("/image", h.Image)
+	g.DELETE("/image", h.DeleteImage)
+	g.PUT("/details", h.Details)
+}
+
+// Signin handler
+func (h *Handler) Signin(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"hello": "it's signin",
+	})
+}
+
+// Signout handler
+func (h *Handler) Signout(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"hello": "it's signout",
+	})
+}
+
+// Tokens handler
+func (h *Handler) Tokens(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"hello": "it's tokens",
+	})
+}
+
+// Image handler
+func (h *Handler) Image(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"hello": "it's image",
+	})
+}
+
+// DeleteImage handler
+func (h *Handler) DeleteImage(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"hello": "it's deleteImage",
+	})
+}
+
+// Details handler
+func (h *Handler) Details(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"hello": "it's details",
+	})
 }
