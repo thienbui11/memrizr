@@ -203,7 +203,7 @@ func TestSignup(t *testing.T) {
 		}
 
 		mockTokenResp := &model.TokenPair{
-			IDTokenID:    "idToken",
+			IDToken:      "idToken",
 			RefreshToken: "refreshToken",
 		}
 
@@ -211,10 +211,10 @@ func TestSignup(t *testing.T) {
 		mockTokenService := new(mocks.MockTokenService)
 
 		mockUserService.
-			On("Signup", mock.AnythingOfType("*gin.Context"), u).
+			On("Signup", mock.AnythingOfType("*context.emptyCtx"), u).
 			Return(nil)
 		mockTokenService.
-			On("NewPairFromUser", mock.AnythingOfType("*gin.Context"), u, "").
+			On("NewPairFromUser", mock.AnythingOfType("*context.emptyCtx"), u, "").
 			Return(mockTokenResp, nil)
 
 		// a response recorder for getting written http response
