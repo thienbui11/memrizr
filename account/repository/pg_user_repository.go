@@ -26,7 +26,7 @@ func NewUserRepository(db *sqlx.DB) model.UserRepository {
 
 // Create reaches out to database SQLX api
 func (r *pGUserRepository) Create(ctx context.Context, u *model.User) error {
-	query := "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *"
+	query := "INSERT INTO public.users (email, password) VALUES ($1, $2) RETURNING *"
 
 	if err := r.DB.GetContext(ctx, u, query, u.Email, u.Password); err != nil {
 		// check unique constraint

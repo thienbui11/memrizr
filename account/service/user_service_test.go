@@ -73,7 +73,7 @@ func TestSignup(t *testing.T) {
 		// We can use Run method to modify the user when the Create method is called.
 		//  We can then chain on a Return method to return no error
 		mockUserRepository.
-			On("Create", mock.AnythingOfType("*context.emptyCtx"), mockUser).
+			On("Create", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("*model.User")).
 			Run(func(args mock.Arguments) {
 				userArg := args.Get(1).(*model.User) // arg 0 is context, arg 1 is *User
 				userArg.UID = uid
@@ -106,7 +106,7 @@ func TestSignup(t *testing.T) {
 		// We can use Run method to modify the user when the Create method is called.
 		//  We can then chain on a Return method to return no error
 		mockUserRepository.
-			On("Create", mock.AnythingOfType("*context.emptyCtx"), mockUser).
+			On("Create", mock.AnythingOfType("*context.emptyCtx"), mock.AnythingOfType("*model.User")).
 			Return(mockErr)
 
 		ctx := context.TODO()

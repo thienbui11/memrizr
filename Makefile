@@ -3,13 +3,14 @@
 # Các biến mặc định
 ACCTPATH := account
 MPATH := account/migrations      # Dùng đường dẫn tương đối để tránh lỗi migrate trên Windows
-PORT := 5432
-DB_NAME ?= postgres              # Cho phép override khi gọi make
+PORT ?= 5432
+DB_NAME ?= postgres
 DB_USER ?= postgres
 DB_PASS ?= password
+DB_HOST ?= postgres-account
 N ?= 1
+URL ?= postgres://$(DB_USER):$(DB_PASS)@$(DB_HOST):$(PORT)/$(DB_NAME)?sslmode=disable
 
-# Tạo khóa RSA cho môi trường (ENV = dev/test)
 create-keypair:
 	@echo Creating an RSA 2048-bit key pair for $(ENV)
 	mkdir -p $(ACCTPATH)
@@ -23,12 +24,12 @@ migrate-create:
 
 # Chạy migrate up
 migrate-up:
-	migrate -source file://$(MPATH) -database "postgres://postgres:password@localhost:5432/mindstack?sslmode=disable" up $(N)
+	migrate -source file://$(MPATH) -database "$(URL)" up $(N)
 
 # Chạy migrate down
 migrate-down:
-	migrate -source file://$(MPATH) -database "postgres://postgres:password@localhost:5432/mindstack?sslmode=disable" down $(N)
+	migrate -source file://$(MPATH) -database "$(URL)" down $(N)
 
 # Ép trạng thái migration
 migrate-force:
-	migrate -source file://$(MPATH) -database "postgres://postgres:password@localhost:5432/mindstack?sslmode=disable" force $(VERSION)
+	migrate -source file://$(MPATH) -database "$(URL)" force $(VERSION)

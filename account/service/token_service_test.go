@@ -56,21 +56,21 @@ func TestNewPairFromUser(t *testing.T) {
 	prevID := "a_previous_tokenID"
 
 	setSuccessArguments := mock.Arguments{
-		mock.AnythingOfType("*context.emptyCtx"),
+		mock.Anything, // context.Context
 		u.UID.String(),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("time.Duration"),
+		mock.Anything, // token string
+		mock.Anything, // time.Duration
 	}
 
 	setErrorArguments := mock.Arguments{
-		mock.AnythingOfType("*context.emptyCtx"),
+		mock.Anything,
 		uidErrorCase.String(),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("time.Duration"),
+		mock.Anything,
+		mock.Anything,
 	}
 
 	deleteWithPrevIDArguments := mock.Arguments{
-		mock.AnythingOfType("*context.emptyCtx"),
+		mock.Anything,
 		u.UID.String(),
 		prevID,
 	}

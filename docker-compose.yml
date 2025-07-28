@@ -18,8 +18,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   postgres-account:
     image: "postgres:alpine"
+    container_name: postgres-account
     environment:
       - POSTGRES_PASSWORD=password
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
     #   Set a volume for data and initial sql script
@@ -39,12 +42,13 @@ services:
       context: ./account
       target: builder
     image: account
-    env_file: ./account/.env.dev
+    env_file: ./.env.dev
     expose:
       - "8080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.account.rule=Host(`malcorp.test`) && PathPrefix(`/api/account`)"
+      - "traefik.http.services.account.loadbalancer.server.port=8080"
     environment:
       - ENV=dev
     volumes:
