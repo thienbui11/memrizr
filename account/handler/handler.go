@@ -2,9 +2,12 @@ package handler
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/thienbui11/MindStack/account/handler/middleware"
 	"github.com/thienbui11/MindStack/account/model"
+	"github.com/thienbui11/MindStack/account/model/apperrors"
 )
 
 // Handler struct holds required services for handler to function
@@ -16,10 +19,11 @@ type Handler struct {
 // Config will hold services that will eventually be injected into this
 // handler layer on handler initialization
 type Config struct {
-	R            *gin.Engine
-	UserService  model.UserService
-	TokenService model.TokenService
-	BaseURL      string
+	R               *gin.Engine
+	UserService     model.UserService
+	TokenService    model.TokenService
+	BaseURL         string
+	TimeoutDuration time.Duration
 }
 
 // NewHandler initializes the handler with required injected services along with http routes
@@ -34,7 +38,13 @@ func NewHandler(c *Config) {
 	// Create an account group
 	g := c.R.Group(c.BaseURL)
 
-	g.GET("/me", h.Me)
+	if gin.Mode() != gin.TestMode {
+		g.Use(middleware.Timeout(c.TimeoutDuration, apperrors.NewServiceUnavailable()))
+		g.GET("/me", middleware.AuthUser(h.TokenService), h.Me)
+	} else {
+		g.GET("/me", h.Me)
+	}
+
 	g.POST("/signup", h.Signup)
 	g.POST("/signin", h.Signin)
 	g.POST("/signout", h.Signout)
@@ -42,13 +52,6 @@ func NewHandler(c *Config) {
 	g.POST("/image", h.Image)
 	g.DELETE("/image", h.DeleteImage)
 	g.PUT("/details", h.Details)
-}
-
-// Signin handler
-func (h *Handler) Signin(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"hello": "it's signin",
-	})
 }
 
 // Signout handler

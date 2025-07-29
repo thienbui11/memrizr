@@ -12,18 +12,21 @@ import (
 type UserService interface {
 	Get(ctx context.Context, uid uuid.UUID) (*User, error)
 	Signup(ctx context.Context, u *User) error
+	Signin(ctx context.Context, u *User) error
 }
 
 // TokenService defines methods the handler layer expects to interact
 // with in regards to producing JWTs as string
 type TokenService interface {
 	NewPairFromUser(ctx context.Context, u *User, prevTokenID string) (*TokenPair, error)
+	ValidateIDToken(tokenString string) (*User, error)
 }
 
 // UserRepository defines methods the service layer expects
 // any repository it interacts with to implement
 type UserRepository interface {
 	FindByID(ctx context.Context, uid uuid.UUID) (*User, error)
+	FindByEmail(ctx context.Context, email string) (*User, error)
 	Create(ctx context.Context, u *User) error
 }
 
