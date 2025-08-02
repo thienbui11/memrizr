@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 DROP TABLE users;
+=======
+DROP TABLE IF EXISTS users;
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
 DROP EXTENSION IF EXISTS "uuid-ossp";

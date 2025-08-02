@@ -18,11 +18,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   postgres-account:
     image: "postgres:alpine"
+<<<<<<< HEAD
     container_name: postgres-account
     environment:
       - POSTGRES_PASSWORD=password
       # - POSTGRES_USER=postgres
       # - POSTGRES_DB=postgres
+=======
+    environment:
+      - POSTGRES_PASSWORD=password
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
     ports:
       - "5432:5432"
     #   Set a volume for data and initial sql script
@@ -42,13 +47,20 @@ services:
       context: ./account
       target: builder
     image: account
+<<<<<<< HEAD
     env_file: ./.env.dev
+=======
+    env_file: ./account/.env.dev
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
     expose:
       - "8080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.account.rule=Host(`malcorp.test`) && PathPrefix(`/api/account`)"
+<<<<<<< HEAD
       - "traefik.http.services.account.loadbalancer.server.port=8080"
+=======
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
     environment:
       - ENV=dev
     volumes:
@@ -57,6 +69,10 @@ services:
     depends_on:
       - postgres-account
       - redis-account
+<<<<<<< HEAD
+=======
+      - reverse-proxy
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
     command: reflex -r "\.go$$" -s -- sh -c "go run ./"
   account-client:
     build:
@@ -69,14 +85,24 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.account-client.rule=Host(`malcorp.test`) && PathPrefix(`/account`)"
+<<<<<<< HEAD
       - "traefik.http.services.account-client.loadbalancer.server.port=3000"
     volumes:
       - ./account-client:/app
       - /app/node_modules
     working_dir: /app
     # command: sh -c "npm install && npm run dev -- --host --port 3000"
+=======
+    volumes:
+      - ./account-client:/app
+      - /app/node_modules #avoid overwriting node_modules
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
     depends_on: 
       - reverse-proxy    
 volumes:
   pgdata_account:
+<<<<<<< HEAD
   redisdata:
+=======
+  redisdata:
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643

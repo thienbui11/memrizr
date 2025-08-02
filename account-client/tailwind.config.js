@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // tailwind.config.js
 module.exports = {
   content: [
@@ -9,3 +10,16 @@ module.exports = {
   },
   plugins: [],
 }
+=======
+module.exports = {
+  purge: [],
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+    extend: {},
+  },
+  variants: {
+    extend: {},
+  },
+  plugins: [],
+}
+>>>>>>> 3999c5b64d9e82200d4e850d267e0d3ed56f0643
