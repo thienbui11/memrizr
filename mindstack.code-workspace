@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "account",
+      "path": "account"
+    },
+    {
+      "name": "account-client",
+      "path": "account-client"
+    },
+    {
+      "name": "mindstack",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "css.validate": false
+  }
+}

@@ -58,6 +58,25 @@ services:
       - postgres-account
       - redis-account
     command: reflex -r "\.go$$" -s -- sh -c "go run ./"
+  account-client:
+    build:
+      context: ./account-client
+    image: account-client # if we don't give image name, traefik won't create router 🤷‍♂️
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.account-client.rule=Host(`malcorp.test`) && PathPrefix(`/account`)"
+      - "traefik.http.services.account-client.loadbalancer.server.port=3000"
+    volumes:
+      - ./account-client:/app
+      - /app/node_modules
+    working_dir: /app
+    # command: sh -c "npm install && npm run dev -- --host --port 3000"
+    depends_on: 
+      - reverse-proxy    
 volumes:
   pgdata_account:
   redisdata:
